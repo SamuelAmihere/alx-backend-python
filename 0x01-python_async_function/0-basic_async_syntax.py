@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-"""Async:
-Write an asynchronous coroutine that takes
-Use the random module.
+"""
+Async
 """
 import asyncio
 import random
