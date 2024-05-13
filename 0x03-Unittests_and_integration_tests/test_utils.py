@@ -5,6 +5,7 @@
 2. Mock a property
 """
 from utils import get_json, access_nested_map
+from utils import memoize
 from unittest.mock import patch, Mock
 from parameterized import parameterized
 import unittest
@@ -41,7 +42,6 @@ class TestGetJson(unittest.TestCase):
         response = get_json(test_url)
         self.assertEqual(response, test_payload)
         mock_get.assert_called_once_with(test_url)
-
 
 
 class TestMemoize(unittest.TestCase):
