@@ -2,8 +2,6 @@
 """
 1. Parameterize and patch as decorators
 """
-
-
 from unittest import TestCase
 from unittest.mock import MagicMock, PropertyMock, patch
 import unittest
@@ -14,6 +12,7 @@ from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
+    """Test for GithubOrgClient."""
     @parameterized.expand([
         ("google",),
         ("abc",),
@@ -82,10 +81,8 @@ class TestGithubOrgClient(unittest.TestCase):
         with patch('client.GithubOrgClient._public_repos_url',
                    new_callable=PropertyMock) as mock_public_repos_url:
             mock_public_repos_url.return_value = test_payload['repos_url']
-
             test_client = GithubOrgClient('google')
             response = test_client.public_repos()
-
             self.assertEqual(response, ["episodes.dart", "kratu"])
             mock_get.assert_called_once_with(
                 mock_public_repos_url.return_value)
@@ -101,6 +98,7 @@ class TestGithubOrgClient(unittest.TestCase):
     },
 ])
 class TestIntegrationGithubOrgClient(TestCase):
+    """Integration test for GithubOrgClient."""
     @classmethod
     def setUpClass(cls):
         """Set up the class with the patcher."""
