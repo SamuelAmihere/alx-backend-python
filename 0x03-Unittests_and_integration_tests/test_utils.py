@@ -45,7 +45,14 @@ class TestGetJson(unittest.TestCase):
 
 
 class TestMemoize(unittest.TestCase):
+    """
+    Test the memoize decorator
+    """
     def test_memoize(self):
+        """
+        Test that the memoize decorator caches the return
+        value of a method
+        """
         class TestClass:
             def a_method(self):
                 return 42
