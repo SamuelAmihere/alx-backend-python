@@ -2,13 +2,14 @@
 """
 1. Parameterize and patch as decorators
 """
-from unittest.mock import MagicMock, PropertyMock, patch
-from parameterized import parameterized
-from client import GithubOrgClient
-import unittest
+
+
 from unittest import TestCase
-from parameterized import parameterized_class
+from unittest.mock import MagicMock, PropertyMock, patch
+import unittest
+from parameterized import parameterized, parameterized_class
 import requests
+from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
 
 
