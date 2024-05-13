@@ -109,28 +109,32 @@ class TestIntegrationGithubOrgClient(TestCase):
         cls.mock_get = cls.get_patcher.start()
 
         # Set the side effect of the mock to return the correct fixtures
-        cls.mock_get.side_effect = lambda url: cls.setUpMock(url)
+        routes = {
+            "https://api.github.com/orgs/google": cls.org_payload,
+            "https://api.github.com/orgs/google/repos": cls.repos_payload,
+        }
+
+        def payload(url):
+            if url in routes:
+                return MagicMock(json=lambda: routes[url])
+            return requests.get(url)
+
+        cls.get_patcher = patch('requests.get', payload)
+        cls.get_patcher.start()
 
     @classmethod
-    def setUpMock(cls, url):
-        """Set up the mock based on the URL."""
-        if url == "https://api.github.com/orgs/google":
-            mock_response = cls.mock_get.return_value
-            mock_response.json.return_value = cls.org_payload
-            return mock_response
-        elif url == "https://api.github.com/users/google/repos":
-            mock_response = cls.mock_get.return_value
-            mock_response.json.return_value = cls.repos_payload
-            return mock_response
+    def tearDownClass(cls):
+        """Tear down the class."""
+        cls.get_patcher.stop()
 
-    @classmethod
-    def setUpMock(cls, url):
-        """Set up the mock based on the URL."""
-        mock_response = cls.mock_get.return_value
-        if url == "https://api.github.com/orgs/google":
-            mock_response.json.return_value = cls.org_payload
-        elif url == "https://api.github.com/users/google/repos":
-            mock_response.json.return_value = cls.repos_payload
-        else:
-            mock_response.json.return_value = {}  # default return value
-        return mock_response
+    def test_public_repos(self):
+        """Test that the public_repos method returns the correct value."""
+        test_client = GithubOrgClient('google')
+        response = test_client.public_repos()
+        self.assertEqual(response, self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """Test that the public_repos method returns the correct value."""
+        test_client = GithubOrgClient('google')
+        response = test_client.public_repos("apache-2.0")
+        self.assertEqual(response, self.apache2_repos)
