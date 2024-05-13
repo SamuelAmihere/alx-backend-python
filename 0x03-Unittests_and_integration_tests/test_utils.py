@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 1. Parameterize a unit test
-
 2. Mock a property
 """
 import unittest
